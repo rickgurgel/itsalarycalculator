@@ -1,37 +1,63 @@
 package org.example;
 
 import org.example.entities.Employee;
-import org.example.enums.Role;
+import org.example.menus.Menu;
+
+import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
 
-        Employee devRicardo = new Employee("Ricardo", Role.DEVELOPER, 3000.00);
-        Employee devWho = new Employee("Thiago", Role.DEVELOPER, 4000.00);
-        Employee dbaPedro = new Employee("Pedro", Role.DBA, 3000.00);
-        Employee dbaJoabe = new Employee("Joabe", Role.DBA, 4500.00);
-        Employee testerRafael = new Employee("Rafael", Role.TESTER, 3333.33);
-        Employee testerZeGuela = new Employee("Ze Guela", Role.TESTER, 2222.22);
+        boolean exit = false;
+        Menu menu = new Menu();
+        Scanner sc = new Scanner(System.in).useLocale(Locale.US);
 
-        devRicardo.setNetSalary(devRicardo.getGrossSalary());
-        devWho.setNetSalary(devWho.getGrossSalary());
-        dbaPedro.setNetSalary(dbaPedro.getGrossSalary());
-        dbaJoabe.setNetSalary(dbaJoabe.getGrossSalary());
-        testerRafael.setNetSalary(testerRafael.getGrossSalary());
-        testerZeGuela.setNetSalary(testerZeGuela.getGrossSalary());
+        List<Employee> employeesList = new ArrayList<>();
 
-        System.out.println("---x---x---x---");
-        System.out.println(devRicardo);
-        System.out.println("---x---x---x---");
-        System.out.println(devWho);
-        System.out.println("---x---x---x---");
-        System.out.println(dbaPedro);
-        System.out.println("---x---x---x---");
-        System.out.println(dbaJoabe);
-        System.out.println("---x---x---x---");
-        System.out.println(testerRafael);
-        System.out.println("---x---x---x---");
-        System.out.println(testerZeGuela);
-        System.out.println("---x---x---x---");
+        while(!exit) {
+
+            menu.mainMenu();
+            int i = sc.nextInt();
+            sc.nextLine();
+
+            switch (i) {
+                case 1:
+                    Employee employee = new Employee();
+                    System.out.println("---   INPUT NEW EMPLOYEE DATA ---");
+                    System.out.println("Name:");
+                    employee.setName(sc.nextLine().toUpperCase());
+                    System.out.println("Choose a Role:");
+                    employee.setRole(sc.nextLine().toUpperCase());
+                    System.out.println("Gross Salary:");
+                    employee.setGrossSalary(sc.nextDouble());
+                    employee.setNetSalary(employee.getGrossSalary());
+                    employee.setId(UUID.randomUUID());
+                    employeesList.add(employee);
+                    System.out.println(employee);
+                    break;
+                case 2:
+                    System.out.println("---   LISTING ALL EMPLOYEES   ---");
+                    for (Employee emp : employeesList){
+                        System.out.println(emp);
+                    }
+                    break;
+                case 3:
+                    System.out.println("---  INPUT ID TO DELETE DATA  ---");
+                    System.out.println("Id:");
+                    UUID uuid = UUID.fromString(sc.nextLine());
+                    employeesList.removeIf(employee1 -> employee1.getId().equals(uuid));
+                    break;
+                case 4:
+                    exit = true;
+                    System.out.println("Exiting...");
+                    break;
+                default:
+                    System.out.println("Choose again...");
+                    break;
+            }
+
+        }
+
+        sc.close();
     }
 }
